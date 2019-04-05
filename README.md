@@ -1,3 +1,3 @@
-* Dotfiles
+# Dotfiles
 
-** Development Configuration -
+## Development Configuration
