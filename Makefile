@@ -1,7 +1,9 @@
-# Getting configuration variables
+# ###########################################################
+# Variable Initializations
+# ###########################################################
 DOTFILES_DIR := $(shell echo $(HOME)/dotfiles)
 SHELL        := /bin/sh
-OSNAME        := $(shell uname -s)
+OSNAME       := $(shell uname -s)
 USER         := $(shell whoami)
 
 ifeq ($(OSNAME), Darwin)
@@ -12,21 +14,25 @@ else ifeq ($(OSNAME), CYGWIN_NT-6.1)
 	OS := windows
 endif
 
-# Main command to install configurations
+# ###########################################################
+# Main target which kicks off configuration based on OS
+# ###########################################################
 .PHONY: all install
 
 all: install
 
 install: $(OS)
 
-# Usage command to display usage message
+# ###########################################################
+# Targets for showing the usage message
+# ###########################################################
 .PHONY: help usage
 .SILENT: help usage
 
 help: usage
 
 usage:
-	printf "\\n\
+	@printf "\\n\
 	\\033[1mDOTFILES\\033[0m\\n\
 	\\n\
 	Custom settings and configurations for Unix-like environments.\\n\
@@ -41,20 +47,11 @@ usage:
 	  make unlink  Remove symlinks created by \`make link\`.\\n\
 	\\n\
 	"
-# OS Specific configurations
+# ###########################################################
+# Targets that kick off OS specific tasks
+# ###########################################################
 .PHONY: macos
 
-macos: brew
-
-# Util commands
-.PHONY: brew
-
-brew:
-		@if [[ $(shell command -v brew) == "" ]]; then\
-    		echo "Homebrew not found, installing ...";\
-    		/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)";\
-		else\
-    		echo "Homebrew found, updating ...";\
-    		brew update;\
-		fi
+macos:
+	@bash ./install.sh
 		
