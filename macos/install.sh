@@ -16,7 +16,7 @@ BOTNAME="Jarvis"
 # ###########################################################
 # Intro
 # ###########################################################
-bot "Hi ${USER}, i'm ${BOTNAME}"
+bot "Hi ${USER}, i'm ${BOTNAME}, the macos installer"
 sleep 2
 bot "I am going to be configuring your system for you."
 bot "Please stay here so you can enter some passwords and answer some questions for me!"
@@ -103,6 +103,8 @@ if [[ $? != 0 ]]; then
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
     if [[ $? != 0 ]]; then
         error "unable to install homebrew, aborting!"
+        info "check to see if you have the command line tools properly installed"
+        exit 2
     fi
     ok "homebrew is installed"
 else
@@ -117,3 +119,10 @@ fi
 
 running "installing brew packages ..."
 brew bundle --file=./macos/.Brewfile
+
+if [[ $? != 0 ]]; then
+    error "there was a problem completing homebrew package installation. aborting!"
+    info "check to see if you already have any application that may clash installed already"
+    exit 2
+fi
+    

@@ -6,7 +6,7 @@ BLUE="\033[0;34m"
 GREENB="\033[1;32m"
 YELLOW="\033[0;33m"
 YELLOWB="\033[1;33m"
-REDB="\033[1;31"
+REDB="\033[1;31m"
 PURPLEB="\033[1;35m"
 BOLD="\033[1m"
 NONE="\033[0m"
@@ -34,5 +34,4 @@ action () {
 
 error () {
     echo -e "${REDB}[error]${NONE} ${1}"
-    exit 2
 }
