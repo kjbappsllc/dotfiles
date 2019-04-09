@@ -125,4 +125,9 @@ if [[ $? != 0 ]]; then
     info "check to see if you already have any application that may clash installed already"
     exit 2
 fi
-    
+
+# ###########################################################
+# Bash configuration
+# ###########################################################
+bot "Configuring bash and terminal settings"
+running "linking bash profiles"
