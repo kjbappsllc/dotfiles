@@ -116,3 +116,6 @@ else
     brew upgrade > /dev/null 2>&1
     ok "brew packages are upgraded"
 fi
+
+running "installing brew packages ..."
+brew bundle --file=./macos/.Brewfile
