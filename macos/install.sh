@@ -63,8 +63,7 @@ defaults write com.apple.dock wvous-bl-modifier -int 0
 ok "set bottom left hot corner to put display to sleep"
 
 # Set dark theme
-info "need password to change theme to dark ..."
-sudo defaults write /Library/Preferences/.GlobalPreferences AppleInterfaceTheme Dark
+sudoPrompt "defaults write /Library/Preferences/.GlobalPreferences AppleInterfaceTheme Dark" "need password to change theme to dark ..."
 ok "set theme to dark theme"
 
 ### Safari ###
@@ -83,9 +82,8 @@ running "checking xcode build tools ..."
 xcode-select --install > /dev/null 2>&1
 if [[ $? == 0 ]]; then
     info "They are not installed, please follow through with the steps."
-    info "Also, please enter your password."
-    sudo xcode-select -s /Applications/Xcode.app/Contents/Developer > /dev/null 2>&1
-    sudo xcodebuild -license accept > /dev/null 2>&1
+    sudoPrompt "xcode-select -s /Applications/Xcode.app/Contents/Developer > /dev/null 2>&1" "need password to setup build tools"
+    sudoPrompt "xcodebuild -license accept > /dev/null 2>&1" "need password to accept license"
     ok "command line build tools are installed"
 else
     info "command line build tools are already installed"
