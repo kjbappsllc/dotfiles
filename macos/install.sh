@@ -130,31 +130,20 @@ fi
 # Bash and terminal configuration
 # ###########################################################
 bot "Configuring Bash and Terminal"
-running "checking bash_profile"
-
-if [[ -f ${HOME}/.bash_profile ]]; then
-    info "bash_profile exists"
+running "creating symlinks"
+action "linking bash_profile"
+ln -fs ${HOME}/dotfiles/bash/.bash_profile ${HOME}/.bash_profile
+if [[ $? != 0 ]]; then
+    error "there was a problem creating a symlink with .bash_profile!"
+    exit 2
 else
-    info "bash_profile does not exist"
-    action "creating bash_profile"
-    touch ${HOME}/.bash_profile
-    if [[ $? != 0 ]]; then
-        error "could not create bash_profile"
-        exit 2
-    fi
-    ok "created bash_profile in home directory"
+    ok "linked"
 fi
-
-running "checking bash_rc"
-if [[ -f ${HOME}/.bash_rc ]]; then
-    info "bash_rc exists"
+action "linking bashrc"
+ln -fs ${HOME}/dotfiles/bash/.bashrc ${HOME}/.bashrc
+if [[ $? != 0 ]]; then
+    error "there was a problem creating a symlink with .bashrc!"
+    exit 2
 else
-    info "bash_rc does not exist"
-    action "creating bash_rc"
-    touch ${HOME}/.bash_rc
-    if [[ $? != 0 ]]; then
-        error "could not create bash_rc"
-        exit 2
-    fi
-    ok "created bash_rc in home directory"
+    ok "linked"
 fi
