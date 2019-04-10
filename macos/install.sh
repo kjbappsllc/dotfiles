@@ -125,4 +125,36 @@ if [[ $? != 0 ]]; then
     info "check to see if you already have any application that may clash installed already"
     exit 2
 fi
-    
+
+# ###########################################################
+# Bash and terminal configuration
+# ###########################################################
+bot "Configuring Bash and Terminal"
+running "checking bash_profile"
+
+if [[ -f ${HOME}/.bash_profile ]]; then
+    info "bash_profile exists"
+else
+    info "bash_profile does not exist"
+    action "creating bash_profile"
+    touch ${HOME}/.bash_profile
+    if [[ $? != 0 ]]; then
+        error "could not create bash_profile"
+        exit 2
+    fi
+    ok "created bash_profile in home directory"
+fi
+
+running "checking bash_rc"
+if [[ -f ${HOME}/.bash_rc ]]; then
+    info "bash_rc exists"
+else
+    info "bash_rc does not exist"
+    action "creating bash_rc"
+    touch ${HOME}/.bash_rc
+    if [[ $? != 0 ]]; then
+        error "could not create bash_rc"
+        exit 2
+    fi
+    ok "created bash_rc in home directory"
+fi
