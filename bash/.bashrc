@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Source ~/.bash_profile in the event of a shell
 # looking for a .bashrc
 

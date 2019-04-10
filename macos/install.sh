@@ -1,7 +1,17 @@
 # ###########################################################
+# Initial Check to see if the command was called from main
+# ###########################################################
+
+fromMain "isMain" > /dev/null 2>&1
+if [[ $? != 0 ]]; then
+    echo -e "\033[1m\nPlease run this script through the main script (bash main.sh). Aborting!\n\033[0m"
+    exit 2
+fi
+
+# ###########################################################
 # Source all util files
 # ###########################################################
-for file in ./utils/*; do
+for file in ./install-utils/*; do
   [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
@@ -11,6 +21,7 @@ unset file;
 # ###########################################################
 OS=$(uname -s)
 USER=$(whoami)
+DOTFILES_DIR="$( cd $(getParentDir)/..; pwd )"
 BOTNAME="Jarvis"
 
 # ###########################################################
@@ -82,8 +93,13 @@ running "checking xcode build tools ..."
 xcode-select --install > /dev/null 2>&1
 if [[ $? == 0 ]]; then
     info "They are not installed, please follow through with the steps."
-    sudoPrompt "xcode-select -s /Applications/Xcode.app/Contents/Developer > /dev/null 2>&1" "need password to setup build tools"
-    sudoPrompt "xcodebuild -license accept > /dev/null 2>&1" "need password to accept license"
+    echo -e "\033[1m\nPress ENTER when you have finished installing\033[0m"
+    read
+    sudoPrompt "xcode-select --switch /Library/Developer/CommandLineTools" "need password to setup build tools"
+    if [[ $? != 0 ]]; then
+        error "could not install command line tools. Aborting!"
+        exit 2
+    fi
     ok "command line build tools are installed"
 else
     info "command line build tools are already installed"
@@ -132,7 +148,7 @@ fi
 bot "Configuring Bash and Terminal"
 running "creating symlinks"
 action "linking bash_profile"
-ln -fs ${HOME}/dotfiles/bash/.bash_profile ${HOME}/.bash_profile
+ln -fs ${DOTFILES_DIR}/bash/.bash_profile ${HOME}/.bash_profile
 if [[ $? != 0 ]]; then
     error "there was a problem creating a symlink with .bash_profile!"
     exit 2
@@ -140,7 +156,7 @@ else
     ok "linked"
 fi
 action "linking bashrc"
-ln -fs ${HOME}/dotfiles/bash/.bashrc ${HOME}/.bashrc
+ln -fs ${DOTFILES_DIR}/bash/.bashrc ${HOME}/.bashrc
 if [[ $? != 0 ]]; then
     error "there was a problem creating a symlink with .bashrc!"
     exit 2
