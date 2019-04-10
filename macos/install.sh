@@ -9,19 +9,11 @@ if [[ $? != 0 ]]; then
 fi
 
 # ###########################################################
-# Source all util files
-# ###########################################################
-for file in ./install-utils/*; do
-  [ -r "$file" ] && [ -f "$file" ] && source "$file";
-done;
-unset file;
-
-# ###########################################################
 # Set variables
 # ###########################################################
 OS=$(uname -s)
 USER=$(whoami)
-DOTFILES_DIR="$( cd $(getParentDir)/..; pwd )"
+PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 BOTNAME="Jarvis"
 
 # ###########################################################
@@ -148,7 +140,7 @@ fi
 bot "Configuring Bash and Terminal"
 running "creating symlinks"
 action "linking bash_profile"
-ln -fs ${DOTFILES_DIR}/bash/.bash_profile ${HOME}/.bash_profile
+ln -fs ${PARENT_DIR}/../bash/.bash_profile ${HOME}/.bash_profile
 if [[ $? != 0 ]]; then
     error "there was a problem creating a symlink with .bash_profile!"
     exit 2
@@ -156,10 +148,18 @@ else
     ok "linked"
 fi
 action "linking bashrc"
-ln -fs ${DOTFILES_DIR}/bash/.bashrc ${HOME}/.bashrc
+ln -fs ${PARENT_DIR}/../bash/.bashrc ${HOME}/.bashrc
 if [[ $? != 0 ]]; then
     error "there was a problem creating a symlink with .bashrc!"
     exit 2
 else
     ok "linked"
+fi
+running "setting up zsh"
+# set zsh as the user login shell
+CURRENTSHELL=$(dscl . -read /Users/$USER UserShell | awk '{print $2}')
+if [[ "$CURRENTSHELL" != "/usr/local/bin/zsh" ]]; then
+    action "setting newer homebrew zsh (/usr/local/bin/zsh) as your shell (password required)"
+    sudo dscl . -change /Users/$USER UserShell $SHELL /usr/local/bin/zsh > /dev/null 2>&1
+    ok "changed shell to current zsh"
 fi
