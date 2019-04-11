@@ -65,10 +65,6 @@ defaults write com.apple.dock wvous-bl-corner -int 10
 defaults write com.apple.dock wvous-bl-modifier -int 0
 ok "set bottom left hot corner to put display to sleep"
 
-# Set dark theme
-sudoPrompt "defaults write /Library/Preferences/.GlobalPreferences AppleInterfaceTheme Dark" "need password to change theme to dark ..."
-ok "set theme to dark theme"
-
 ### Safari ###
 
 # Privacy: don’t send search queries to Apple
@@ -163,7 +159,7 @@ fi
 running "setting up iterm and related tools"
 if [[ ! -d "~/.oh-my-zsh" ]]; then
     action "installing oh-my-zsh"
-    sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" > /dev/null 2>&1
+    sh -c "$(curl -fsSL https://raw.github.com/kjbappsllc/oh-my-zsh/master/tools/install.sh)"
 else
     info "oh-my-zsh is already installed"
 fi
