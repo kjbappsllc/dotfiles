@@ -157,14 +157,14 @@ else
 fi
 
 running "setting up iterm and related tools"
-if [[ ! -d "~/.oh-my-zsh" ]]; then
+if [[ ! -d "${HOME}/.oh-my-zsh" ]]; then
     action "installing oh-my-zsh"
     sh -c "$(curl -fsSL https://raw.github.com/kjbappsllc/oh-my-zsh/master/tools/install.sh)"
 else
     info "oh-my-zsh is already installed"
 fi
 
-if [[ ! -d "~/.oh-my-zsh/custom/themes/powerlevel9k" ]]; then
+if [[ ! -d "${HOME}/.oh-my-zsh/custom/themes/powerlevel9k" ]]; then
     action "installing powerlevel theme"
     git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
 else
