@@ -14,6 +14,7 @@ fi
 OS=$(uname -s)
 USER=$(whoami)
 PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+COLOR_SCHEMES_DIR="${PARENT_DIR}/../config/color-schemes"
 BOTNAME="Jarvis"
 
 # ###########################################################
@@ -170,6 +171,11 @@ if [[ ! -d "${HOME}/.oh-my-zsh/custom/themes/powerlevel9k" ]]; then
 else
     info "zsh theme already set"
 fi
+
+action "setting custom color themes in iterm"
+for theme in ${COLOR_SCHEMES_DIR}/*; do
+    open ${theme}
+done
 
 # Create symlinks
 running "creating symlinks"
