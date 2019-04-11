@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-# Reload .bash_profile
+# Reload .bash_profile or zshrc
 alias rebash="source ~/.bash_profile"
+alias rezsh="source ~/.zshrc"
 
 # Finder
 alias f="open ."

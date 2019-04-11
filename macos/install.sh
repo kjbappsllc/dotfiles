@@ -75,6 +75,17 @@ ok "set theme to dark theme"
 defaults write com.apple.Safari UniversalSearchEnabled -bool false
 defaults write com.apple.Safari SuppressSearchSuggestions -bool true
 ok "set privacy to not send search queries to apple"
+
+# Show the ~/Library folder.
+chflags nohidden ~/Library
+ok "show the Library folder by default"
+
+defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
+ok "Disable smart quotes"
+
+defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
+ok "Disable smart dashes"
+
 sleep 0.5
 
 # ###########################################################
@@ -138,9 +149,36 @@ fi
 # Bash and terminal configuration
 # ###########################################################
 bot "Configuring Bash and Terminal"
+# set zsh as the user login shell
+running "setting up zsh"
+CURRENTSHELL=$(dscl . -read /Users/$USER UserShell | awk '{print $2}')
+if [[ "$CURRENTSHELL" != "/usr/local/bin/zsh" ]]; then
+    action "setting newer homebrew zsh (/usr/local/bin/zsh) as your shell (password required)"
+    sudo dscl . -change /Users/$USER UserShell $SHELL /usr/local/bin/zsh > /dev/null 2>&1
+    ok "changed shell to current zsh"
+else
+    info "shell is already set to zsh"
+fi
+
+running "setting up iterm and related tools"
+if [[ ! -d "~/.oh-my-zsh" ]]; then
+    action "installing oh-my-zsh"
+    sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" > /dev/null 2>&1
+else
+    info "oh-my-zsh is already installed"
+fi
+
+if [[ ! -d "~/.oh-my-zsh/custom/themes/powerlevel9k" ]]; then
+    action "installing powerlevel theme"
+    git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
+else
+    info "zsh theme already set"
+fi
+
+# Create symlinks
 running "creating symlinks"
 action "linking bash_profile"
-ln -fs ${PARENT_DIR}/../bash/.bash_profile ${HOME}/.bash_profile
+ln -fs ${PARENT_DIR}/../terminal/.bash_profile ${HOME}/.bash_profile
 if [[ $? != 0 ]]; then
     error "there was a problem creating a symlink with .bash_profile!"
     exit 2
@@ -148,18 +186,18 @@ else
     ok "linked"
 fi
 action "linking bashrc"
-ln -fs ${PARENT_DIR}/../bash/.bashrc ${HOME}/.bashrc
+ln -fs ${PARENT_DIR}/../terminal/.bashrc ${HOME}/.bashrc
 if [[ $? != 0 ]]; then
     error "there was a problem creating a symlink with .bashrc!"
     exit 2
 else
     ok "linked"
 fi
-running "setting up zsh"
-# set zsh as the user login shell
-CURRENTSHELL=$(dscl . -read /Users/$USER UserShell | awk '{print $2}')
-if [[ "$CURRENTSHELL" != "/usr/local/bin/zsh" ]]; then
-    action "setting newer homebrew zsh (/usr/local/bin/zsh) as your shell (password required)"
-    sudo dscl . -change /Users/$USER UserShell $SHELL /usr/local/bin/zsh > /dev/null 2>&1
-    ok "changed shell to current zsh"
+action "linking zsh"
+ln -fs ${PARENT_DIR}/../terminal/.zshrc ${HOME}/.zshrc
+if [[ $? != 0 ]]; then
+    error "there was a problem creating a symlink with .bashrc!"
+    exit 2
+else
+    ok "linked"
 fi
