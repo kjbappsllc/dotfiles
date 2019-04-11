@@ -185,7 +185,7 @@ if [[ $? != 0 ]]; then
     error "there was a problem creating a symlink with .bash_profile!"
     exit 2
 else
-    ok "linked"
+    ok "linked bash_profile"
 fi
 action "linking bashrc"
 ln -fs ${PARENT_DIR}/../terminal/.bashrc ${HOME}/.bashrc
@@ -193,7 +193,7 @@ if [[ $? != 0 ]]; then
     error "there was a problem creating a symlink with .bashrc!"
     exit 2
 else
-    ok "linked"
+    ok "linked bashrc"
 fi
 action "linking zsh"
 ln -fs ${PARENT_DIR}/../terminal/.zshrc ${HOME}/.zshrc
@@ -201,5 +201,5 @@ if [[ $? != 0 ]]; then
     error "there was a problem creating a symlink with .bashrc!"
     exit 2
 else
-    ok "linked"
+    ok "linked zshrc"
 fi
