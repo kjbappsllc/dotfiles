@@ -14,6 +14,7 @@ fi
 OS=$(uname -s)
 USER=$(whoami)
 PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+OMZSH_CUSTOM=${HOME}/.oh-my-zsh/custom
 COLOR_SCHEMES_DIR="${PARENT_DIR}/../config/color-schemes"
 BOTNAME="Jarvis"
 
@@ -24,7 +25,6 @@ bot "Hi ${USER}, i'm ${BOTNAME}, the macos installer"
 sleep 2
 bot "I am going to be configuring your system for you."
 bot "Please stay here so you can enter some passwords and answer some questions for me!"
-bot "Don't worry, I am clean and won't do anything with them."
 sleep 1
 bot "Starting configuration tasks ..."
 sleep 2
@@ -44,6 +44,9 @@ ok "set default to save to disk not iCloud"
 # Save screenshots as PNG
 defaults write com.apple.screencapture type -string "png"
 ok "set screenshots to save as png format"
+
+defaults write com.apple.screencapture location -string "${HOME}/Desktop"
+ok "Save screenshots to the desktop"
 
 # Set plain text as default format in TextEdit
 defaults write com.apple.TextEdit RichText -int 0
@@ -82,6 +85,32 @@ ok "Disable smart quotes"
 
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 ok "Disable smart dashes"
+
+defaults write com.apple.screensaver askForPassword -int 1
+defaults write com.apple.screensaver askForPasswordDelay -int 0
+ok "Require password immediately after sleep or screen saver begins"
+
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+ok "Show all filename extensions"
+
+defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+ok "When performing a search, search the current folder by default"
+
+defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+ok "Disable the warning when changing a file extension"
+
+# Four-letter codes for the other view modes: `icnv`, `clmv`, `Flwv`
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
+ok "Use list view in all Finder windows by default"
+
+defaults write com.apple.dock enable-spring-load-actions-on-all-items -bool true
+ok "Enable spring loading for all Dock items"
+
+defaults write com.apple.dock launchanim -bool false
+ok "Don’t animate opening applications from the Dock"
+
+defaults write com.apple.dock expose-animation-duration -float 0.1
+ok "Speed up Mission Control animations"
 
 sleep 0.5
 
@@ -158,24 +187,65 @@ else
 fi
 
 running "setting up iterm and related tools"
+action "checking oh-my-zsh"
 if [[ ! -d "${HOME}/.oh-my-zsh" ]]; then
+    info "oh-my-zsh is not installed"
     action "installing oh-my-zsh"
     sh -c "$(curl -fsSL https://raw.github.com/kjbappsllc/oh-my-zsh/master/tools/install.sh)"
 else
     info "oh-my-zsh is already installed"
 fi
 
-if [[ ! -d "${HOME}/.oh-my-zsh/custom/themes/powerlevel9k" ]]; then
-    action "installing powerlevel theme"
-    git clone https://github.com/bhilburn/powerlevel9k.git ~/.oh-my-zsh/custom/themes/powerlevel9k
+action "checking powerlevel9k theme"
+if [[ ! -d "${OMZSH_CUSTOM}/themes/powerlevel9k" ]]; then
+    info "powerlevel 9k theme is not set"
+    action "installing powerlevel9k theme"
+    git clone https://github.com/bhilburn/powerlevel9k.git ${OMZSH_CUSTOM}/themes/powerlevel9k
+    if [[ $? != 0 ]]; then
+        error "powerlevel9k theme installation failed, check network"
+        exit 2
+    else
+        ok "installed powerlevel 9k theme"
+    fi
 else
-    info "zsh theme already set"
+    info "powerlevel9k theme already set"
 fi
 
 action "setting custom color themes in iterm"
 for theme in ${COLOR_SCHEMES_DIR}/*; do
     open ${theme}
+    ok "set ${theme}"
 done
+
+action "checking syntax highlighting"
+if [[ ! -d "${OMZSH_CUSTOM}/plugins/zsh-syntax-highlighting" ]]; then
+    info "zsh-syntax-highlighting is not set"
+    action "installing zsh-syntax-highlight"
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${OMZSH_CUSTOM}/plugins/zsh-syntax-highlighting
+    if [[ $? != 0 ]]; then
+        error "syntax highlighting plugin install failed, check network"
+        exit 2
+    else
+        ok "installed syntax highlighting plugin"
+    fi
+else
+    info "zsh-syntax-highlighting is already set"
+fi
+
+action "checking auto-completion"
+if [[ ! -d "${OMZSH_CUSTOM}/plugins/zsh-autosuggestions" ]]; then
+    info "zsh-autosuggestions is not set"
+    action "installing zsh-autosuggestions"
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${OMZSH_CUSTOM}/plugins/zsh-autosuggestions
+    if [[ $? != 0 ]]; then
+        error "zsh-autosuggestions plugin install failed, check network"
+        exit 2
+    else
+        ok "installed autosuggestions plugin"
+    fi
+else
+    info "zsh-autosuggestions is already set"
+fi
 
 # Create symlinks
 running "creating symlinks"
@@ -203,3 +273,45 @@ if [[ $? != 0 ]]; then
 else
     ok "linked zshrc"
 fi
+
+running "configuring iterm2 specific setting"
+
+defaults write com.googlecode.iterm2 PromptOnQuit -bool false
+ok "Don’t display prompt when quitting iTerm"
+
+defaults write com.googlecode.iterm2 "Normal Font" -string "FiraCode-Retina 14";
+ok "Set default iterm font"
+
+defaults write com.googlecode.iterm2 "ASCII Ligatures" -bool true
+ok "setting ligatures"
+
+defaults read -app iTerm > /dev/null 2>&1;
+ok "reading iterm settings"
+
+# ###########################################################
+# Node and npm configurations
+# ###########################################################
+bot "Configuring node and installing node packages"
+running "installing npm global packages"
+source ${PARENT_DIR}/../node/.npm_g_packages
+
+# ###########################################################
+# Conclusion
+# ###########################################################
+bot "Killing all related applications"
+for app in "Dock" "Finder" "Safari" "SystemUIServer" "iCal" "Terminal"; do
+  killall "${app}" > /dev/null 2>&1
+  ok "killed ${app}"
+done
+
+bot "Thank you for being patient :)"
+echo -e "${REDB}                                                   
+   (                        (           )       (     
+   )\           )           )\   (   ( /(   (   )\ )  
+ (((_)   (     (     \`  )  ((_) ))\  )\()) ))\ (()/(  
+ )\___   )\    )\  ' /(/(   _  /((_)(_))/ /((_) ((_)) 
+((/ __| ((_) _((_)) ((_)_\ | |(_))  | |_ (_))   _| |  
+ | (__ / _ \| '  \()| '_ \)| |/ -_) |  _|/ -_)/ _\` |  
+  \___|\___/|_|_|_| | .__/ |_|\___|  \__|\___|\__,_|  
+                    |_|                               
+${NONE}"

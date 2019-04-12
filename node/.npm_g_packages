@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+n () {
+    npm i -g ${1} > /dev/null 2>&1
+    ok "${1}"
+}
+
+n spoof
+n np
+n npx
+n fkill
+n vtop
+n rimraf
+n branch-diff
+n nodemon
+n localtunnel
+n now
+n david
+n forever
