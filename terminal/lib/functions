@@ -19,7 +19,7 @@ CONFIG_DIR="${DOTFILES_DIR}/config"
 # Generate template build.gradle
 gen-gradle () {
     for file in ${CONFIG_DIR}/templates/gradle/*; do
-        cp ${file} .
+        cp -r ${file} .
     done
     unset file
     if [[ $? == 0 ]]; then
