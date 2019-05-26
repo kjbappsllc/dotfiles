@@ -1,1 +1,3 @@
 #!/usr/bin/env bash
+
+alias gcall="git add -A && git commit -m"
