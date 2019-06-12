@@ -22,3 +22,7 @@ alias iplocal="ipconfig getifaddr en0"
 alias ls='ls -G -h -p -a'
 alias ll='ls -l -G -h -p -a'
 
+# DOCKER
+alias dsc="docker stop $(docker ps -aq)"
+alias drmc="docker rm $(docker ps -aq)"
+alias drmi="docker rmi $(docker images -q)"
