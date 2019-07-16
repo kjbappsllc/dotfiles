@@ -15,7 +15,7 @@ function co() {
     git fetch > /dev/null;
     local branches=$(git for-each-ref --sort=-committerdate --format="%(HEAD) $CYAN %(refname:short) $RESET- %(authorname) ($GREEN %(committerdate:relative)$RESET)" refs/heads)
     local remotes=$(git for-each-ref --sort=-committerdate --format="%(HEAD) $YELLOW %(refname:short) $RESET- %(authorname) ($GREEN %(committerdate:relative)$RESET)" refs/remotes)
-    local target=$( ( echo "$remotes"; echo "$branches";) | fzf --ansi --tac | cut -c4- | awk '{print $1}' | cut -d'/' -f2 )
+    local target=$( ( echo "$remotes"; echo "$branches";) | fzf --ansi --tac --no-sort | cut -c4- | awk '{print $1}' | cut -d'/' -f2 )
     if [ -n "$target" ]; then
       echo "Checking out $target"
       git checkout "$target"
