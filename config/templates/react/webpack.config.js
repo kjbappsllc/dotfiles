@@ -39,7 +39,7 @@ module.exports = {
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: path.resolve(__dirname, '<HTML TEMPLATE LOCATION>'),
-            title: "Coffer: Budget Application"
+            title: "<TITLE>"
         }),
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin({
