@@ -7,20 +7,24 @@ alias gcall="git add -A && git commit -m"
 
 #Git functions
 function co() {
-  if [ -z "$1" ]; then
-    RESET='\033[0m'
-    GREEN='\033[0;32m'
-    CYAN='\033[0;36m'
-    YELLOW='\e[33m'
-    git fetch > /dev/null;
+    if [ -n "$1" ]; then
+      git rev-parse --verify $1 &> /dev/null
+      if [ $? -eq 0 ]; then
+        git checkout $1;
+        return
+      fi
+    fi
+    local RESET='\033[0m'
+    local GREEN='\033[0;32m'
+    local CYAN='\033[0;36m'
+    local YELLOW='\e[33m'
+    local args="${@:1}"
+    git fetch > /dev/null # Comment out this line if you don't care about the latest
     local branches=$(git for-each-ref --sort=-committerdate --format="%(HEAD) $CYAN %(refname:short) $RESET- %(authorname) ($GREEN %(committerdate:relative)$RESET)" refs/heads)
     local remotes=$(git for-each-ref --sort=-committerdate --format="%(HEAD) $YELLOW %(refname:short) $RESET- %(authorname) ($GREEN %(committerdate:relative)$RESET)" refs/remotes)
-    local target=$( ( echo "$remotes"; echo "$branches";) | fzf --ansi --tac --no-sort | cut -c4- | awk '{print $1}' | cut -d'/' -f2 )
+    local target=$( ( echo "$branches"; echo "$remotes"; ) | fzf --ansi --no-sort --query=$args --prompt="Branch: " | cut -c4- | awk '{print $1}' | cut -d'/' -f2 )
     if [ -n "$target" ]; then
       echo "Checking out $target"
       git checkout "$target"
     fi
-  else
-    git checkout $1
-  fi
 }
