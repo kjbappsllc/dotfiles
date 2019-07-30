@@ -4,6 +4,7 @@
 alias gt="git tag -l"
 alias gtd="git tag -d $1"
 alias gcall="git add -A && git commit -m"
+alias grevc="git reset --soft HEAD^"
 
 #Git functions
 function co() {
