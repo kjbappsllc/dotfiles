@@ -12,8 +12,10 @@ DOTFILES_DIR=$(cd $(dirname -- $(readlink ~/.bash_profile))/../; pwd -P)
 CONFIG_DIR="${DOTFILES_DIR}/config"
 
 #########################################################
-# TEMPLATE GENERATION
-# all generation functions start with 'gen'
+# Functions
 #########################################################
 
-
+mvnw() {
+    which mvn 2> /dev/null
+    [[ $? == 0 ]] && mvn -N io.takari:maven:wrapper
+}

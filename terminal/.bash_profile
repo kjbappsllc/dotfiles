@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 DOTFILES_DIR=$(dirname -- $(readlink ~/.bash_profile))
 # Source all bash lib files
 for file in ${DOTFILES_DIR}/lib/*; do
@@ -12,6 +11,9 @@ if [[ -d "$HOME/.nvm" ]]; then
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
+
+#Exports
+[[ -d /Users/KJB0GK2/Library/Android/sdk ]] && export ANDROID_HOME="/Users/KJB0GK2/Library/Android/sdk"
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/Users/KJB0GK2/.sdkman"
