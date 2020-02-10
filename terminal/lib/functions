@@ -15,7 +15,7 @@ CONFIG_DIR="${DOTFILES_DIR}/config"
 # Functions
 #########################################################
 
-mvnw() {
+wrap-mvn() {
     which mvn 2> /dev/null
     [[ $? == 0 ]] && mvn -N io.takari:maven:wrapper
 }
