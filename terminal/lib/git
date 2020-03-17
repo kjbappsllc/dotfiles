@@ -5,6 +5,7 @@ alias gt="git tag -l"
 alias gtd="git tag -d $1"
 alias gcall="git add -A && git commit -m"
 alias grevc="git reset --soft HEAD^"
+alias gdlb="git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d"
 
 #Git functions
 function co() {
