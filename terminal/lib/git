@@ -5,7 +5,7 @@ alias gt="git tag -l"
 alias gtd="git tag -d $1"
 alias gcall="git add -A && git commit -m"
 alias grevc="git reset --soft HEAD^"
-alias gdlb="git branch --merged | egrep -v "(^\*|master|dev)" | xargs git branch -d"
+alias gdlb="git branch --merged | egrep -v \"(^\*|master|dev)\" | xargs git branch -d"
 
 #Git functions
 function co() {
@@ -29,4 +29,9 @@ function co() {
       echo "Checking out $target"
       git checkout "$target"
     fi
+}
+
+function conb() {
+  git checkout -b $1
+  git push -u origin $1
 }
