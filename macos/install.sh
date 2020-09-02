@@ -196,19 +196,19 @@ else
     info "oh-my-zsh is already installed"
 fi
 
-action "checking powerlevel9k theme"
-if [[ ! -d "${OMZSH_CUSTOM}/themes/powerlevel9k" ]]; then
-    info "powerlevel 9k theme is not set"
-    action "installing powerlevel9k theme"
-    git clone https://github.com/bhilburn/powerlevel9k.git ${OMZSH_CUSTOM}/themes/powerlevel9k
+action "checking powerlevel10k theme"
+if [[ ! -d "${OMZSH_CUSTOM}/themes/powerlevel10k" ]]; then
+    info "powerlevel 10k theme is not set"
+    action "installing powerlevel10k theme"
+    git clone https://github.com/romkatv/powerlevel10k.git ${OMZSH_CUSTOM}/themes/powerlevel10k
     if [[ $? != 0 ]]; then
-        error "powerlevel9k theme installation failed, check network"
+        error "powerlevel10k theme installation failed, check network"
         exit 2
     else
-        ok "installed powerlevel 9k theme"
+        ok "installed powerlevel 10k theme"
     fi
 else
-    info "powerlevel9k theme already set"
+    info "powerlevel10k theme already set"
 fi
 
 action "setting custom color themes in iterm"

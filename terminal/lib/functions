@@ -12,23 +12,10 @@ DOTFILES_DIR=$(cd $(dirname -- $(readlink ~/.bash_profile))/../; pwd -P)
 CONFIG_DIR="${DOTFILES_DIR}/config"
 
 #########################################################
-# TEMPLATE GENERATION
-# all generation functions start with 'gen'
+# Functions
 #########################################################
 
-# Generate template build.gradle
-gen-gradle () {
-    for file in ${CONFIG_DIR}/templates/gradle/*; do
-        cp -r ${file} .
-    done
-    unset file
-    if [[ $? == 0 ]]; then
-        echo -e "\ngradle template is generated"
-        echo -e "\n${YELLOWB}Please replace the following placeholders in the generated files:"
-        echo -e "\n* Main-Class\n* Project Name\n* Versions in gradle.properties\n${NONE}"
-    else
-        echo "\nError generating file"
-    fi
+wrap-mvn() {
+    which mvn 2> /dev/null
+    [[ $? == 0 ]] && mvn -N io.takari:maven:wrapper
 }
-
-

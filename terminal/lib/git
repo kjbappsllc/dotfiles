@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+#Git aliases
+alias gt="git tag -l"
+alias gtd="git tag -d $1"
+alias gcall="git add -A && git commit -m"
+alias grevc="git reset --soft HEAD^"
+alias gdlb="git branch --merged | egrep -v \"(^\*|master|dev)\" | xargs git branch -d"
+
+#Git functions
+function co() {
+    if [ -n "$1" ]; then
+      git rev-parse --verify $1 &> /dev/null
+      if [ $? -eq 0 ]; then
+        git checkout $1;
+        return
+      fi
+    fi
+    local RESET='\033[0m'
+    local GREEN='\033[0;32m'
+    local CYAN='\033[0;36m'
+    local YELLOW='\e[33m'
+    local args="${@:1}"
+    git fetch > /dev/null # Comment out this line if you don't care about the latest
+    local branches=$(git for-each-ref --sort=-committerdate --format="%(HEAD) $CYAN %(refname:short) $RESET- %(authorname) ($GREEN %(committerdate:relative)$RESET)" refs/heads)
+    local remotes=$(git for-each-ref --sort=-committerdate --format="%(HEAD) $YELLOW %(refname:short) $RESET- %(authorname) ($GREEN %(committerdate:relative)$RESET)" refs/remotes)
+    local target=$( ( echo "$branches"; echo "$remotes"; ) | fzf --ansi --no-sort --query=$args --prompt="Branch: " | cut -c4- | awk '{print $1}' | cut -d'/' -f2 )
+    if [ -n "$target" ]; then
+      echo "Checking out $target"
+      git checkout "$target"
+    fi
+}
+
+function conb() {
+  git checkout -b $1
+  git push -u origin $1
+}

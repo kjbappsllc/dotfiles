@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-#Git tag aliases
-alias gt="git tag -l"
-alias gtd="git tag -d $1"
-alias gcall="git add -A && git commit -m"
