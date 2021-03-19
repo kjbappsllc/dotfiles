@@ -14,6 +14,8 @@ fi
 
 #Exports
 [[ -d /Users/KJB0GK2/Library/Android/sdk ]] && export ANDROID_HOME="/Users/KJB0GK2/Library/Android/sdk"
+export PATH=~/Library/Android/sdk/tools:$PATH
+export PATH=~/Library/Android/sdk/platform-tools:$PATH
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/Users/KJB0GK2/.sdkman"

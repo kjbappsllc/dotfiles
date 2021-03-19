@@ -12,6 +12,7 @@ alias afk="/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resource
 
 # IP addresses
 alias iplocal="ipconfig getifaddr en0"
+alias see-ports="lsof -i -n -P | grep TCP"
 
 # Directory listings
 # LS_COLORS='no=01;37:fi=01;37:di=07;96:ln=01;36:pi=01;32:so=01;35:do=01;35:bd=01;33:cd=01;33:ex=01;31:mi=00;05;37:or=00;05;37:'
@@ -26,3 +27,7 @@ alias ll='ls -l -G -h -p -a'
 alias dsc="docker stop \$(docker ps -aq)"
 alias drmc="docker rm \$(docker ps -aq)"
 alias drmi="docker rmi \$(docker images -q)"
+
+# ADB
+alias adb-sn="adb shell getprop ro.serialno"
+alias adb-pkgs="adb shell 'pm list packages -f' | sed -e 's/.*=//' | sort"
