@@ -24,10 +24,11 @@ function co() {
     git fetch > /dev/null # Comment out this line if you don't care about the latest
     local branches=$(git for-each-ref --sort=-committerdate --format="%(HEAD) $CYAN %(refname:short) $RESET- %(authorname) ($GREEN %(committerdate:relative)$RESET)" refs/heads)
     local remotes=$(git for-each-ref --sort=-committerdate --format="%(HEAD) $YELLOW %(refname:short) $RESET- %(authorname) ($GREEN %(committerdate:relative)$RESET)" refs/remotes)
-    local target=$( ( echo "$branches"; echo "$remotes"; ) | fzf --ansi --no-sort --query=$args --prompt="Branch: " | cut -c4- | awk '{print $1}' | cut -d'/' -f2 )
+    local target=$( ( echo "$branches"; echo "$remotes"; ) | fzf --ansi --no-sort --query=$args --prompt="Branch: " | cut -c4- | awk '{print $1}' )
     if [ -n "$target" ]; then
-      echo "Checking out $target"
-      git checkout "$target"
+      strippedTarget=${target#origin/}
+      echo "Checking out $strippedTarget"
+      git checkout "$strippedTarget"
     fi
 }
 

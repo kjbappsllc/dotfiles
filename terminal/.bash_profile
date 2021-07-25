@@ -12,4 +12,14 @@ if [[ -d "$HOME/.nvm" ]]; then
   [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 fi
 
-[[ -d /Users/Keyshawn/Library/Android/sdk ]] && export ANDROID_HOME="/Users/Keyshawn/Library/Android/sdk"
+#Exports
+[[ -d /Users/KJB0GK2/Library/Android/sdk ]] && export ANDROID_HOME="/Users/KJB0GK2/Library/Android/sdk"
+export PATH=~/Library/Android/sdk/tools:$PATH
+export PATH=~/Library/Android/sdk/platform-tools:$PATH
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/Users/KJB0GK2/.sdkman"
+[[ -s "/Users/KJB0GK2/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/KJB0GK2/.sdkman/bin/sdkman-init.sh"
+export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
+export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
+export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
