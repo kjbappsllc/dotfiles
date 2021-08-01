@@ -145,7 +145,7 @@ brew_bin=$(command -v brew) 2>&1 > /dev/null
 if [[ $? != 0 ]]; then
     info "homebrew is not installed"
     action "installing homebrew"
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     if [[ $? != 0 ]]; then
         error "unable to install homebrew, aborting!"
         info "check to see if you have the command line tools properly installed"
