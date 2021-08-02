@@ -26,8 +26,12 @@ alias ll='ls -l -G -h -p -a'
 # DOCKER
 alias dsc="docker stop \$(docker ps -aq)"
 alias drmc="docker rm \$(docker ps -aq)"
-alias drmi="docker rmi \$(docker images -q)"
+alias drmi="docker rmi \$(docker images -qf \"dangling=true\")"
 
 # ADB
 alias adb-sn="adb shell getprop ro.serialno"
 alias adb-pkgs="adb shell 'pm list packages -f' | sed -e 's/.*=//' | sort"
+
+function adb-pkg-ver () {
+  adb shell dumpsys package $1 | grep versionName
+}
